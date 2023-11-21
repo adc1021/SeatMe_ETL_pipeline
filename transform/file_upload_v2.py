@@ -8,22 +8,14 @@ from user_validation import users_validation
 from restaurant_validation import restaurant_validation
 import configparser
 
-# pulling variables from config file
-def read_config(file_path='config.ini'):
-    config = configparser.ConfigParser()
-    config.read(file_path)
-    return config
 
-# Example usage
-config = read_config()
-
-# pwd = 'biZRsBfFsAy7mJ45QhMhshNbirTUhVzT'
-# uid = 'antho'
-# server = "dpg-cl796vqvokcc73ak2vog-a.ohio-postgres.render.com"
-# db = "seatme_production_9g3t"
-# port = "5432"
-# director = r'/Users/antho/Documents/Job Search - 2023/Port-Proj/SeatMe_ETL'
-# to = 'jimbosixx@yahoo.com'
+pwd = 'biZRsBfFsAy7mJ45QhMhshNbirTUhVzT'
+uid = 'antho'
+server = "dpg-cl796vqvokcc73ak2vog-a.ohio-postgres.render.com"
+db = "seatme_production_9g3t"
+port = "5432"
+director = r'/Users/antho/Documents/Job Search - 2023/Port-Proj/SeatMe_ETL'
+to = 'jimbosixx@yahoo.com'
 
 # Initialize rows_imported outside the function
 rows_imported = 0
