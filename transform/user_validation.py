@@ -1,6 +1,7 @@
 import re
 import pandas as pd
 
+#function that directs each row to the distinct function designed to filter it's values
 def validate_column(clean_df, column_name, validation_function, result_column_name, tbl):
     if column_name in clean_df.columns:
         clean_df[result_column_name] = clean_df[column_name].apply(validation_function)
@@ -11,6 +12,7 @@ def validate_column(clean_df, column_name, validation_function, result_column_na
             print(invalid_entries[[column_name]])
     return
 
+# validates users information prior to loading into db
 def users_validation(clean_df, tbl):
     validate_column(clean_df, 'phone_number', is_valid_phone_number, 'is_valid_phone', tbl)
     validate_column(clean_df, 'email', is_valid_email, 'is_valid_email', tbl)
@@ -19,6 +21,7 @@ def users_validation(clean_df, tbl):
 
     return clean_df, tbl
 
+# checks to ensure valid phone number formatting
 def is_valid_phone_number(phone_number):
     if pd.isna(phone_number) or not isinstance(phone_number, str):
         return False
@@ -26,6 +29,7 @@ def is_valid_phone_number(phone_number):
     pattern = re.compile(r'^\D*(\d{3})\D*(\d{3})\D*(\d{4})\D*$')
     return bool(pattern.match(phone_number))
 
+# checks to ensure valid email formatting
 def is_valid_email(email):
     if pd.isna(email) or not isinstance(email, str):
         return False

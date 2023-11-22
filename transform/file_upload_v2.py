@@ -18,7 +18,6 @@ def read_config(file_path='/Users/antho/Documents/Job Search - 2023/Port-Proj/Se
             config[section][key] = eval(value)
     return config
 
-# Example usage
 config = read_config()
 
 pwd = config['credentials']['pwd']
@@ -46,28 +45,32 @@ def extract():
                 # checking if it's a file
 
                 if os.path.isfile(f):
+                    #iterate over all sheets in the file and use the first row for headers
                     xls = pd.read_excel(f, header=0, sheet_name=None, engine='openpyxl')
                     for sheet_name, df in xls.items():
-                        # filtering for specific conditions we want to filter for in different sheets
+                        # begin filtering for data cleaning
                         if sheet_name != 'restaurants':
                             print(f"Processing file: {filename}, Sheet: {sheet_name}")
-                            nan_rows = df[df.isna().any(axis=1)]  # Rows with NaN values
+                             # Rows with NaN values
+                            nan_rows = df[df.isna().any(axis=1)]
+                            # Rows without NaN values
                             clean_df = df.dropna()
                             if sheet_name == 'users':
                                 clean_df, sheet_name = users_validation(clean_df, sheet_name)
                         else:
+                            print(f"Processing file: {filename}, Sheet: {sheet_name}")
                             clean_df, sheet_name = restaurant_validation(df, sheet_name)
                         load(clean_df, sheet_name)
 
     except Exception as e:
-        # pdb.set_trace()
         print("error while extracting data: " + str(e))
 
 # load data to postgres
 def load(clean_df, tbl):
-    # pdb.set_trace()
     try:
-        global rows_imported  # Declare rows_imported as global
+        # Declare rows_imported as global
+        global rows_imported
+        # creating connection to database
         engine = create_engine(f'postgresql://{uid}:{pwd}@{server}:{port}/{db}')
         print(f'importing rows {rows_imported} to {rows_imported + len(clean_df)}...')
         # save df to postgres; method='multi' allows for bulk inserts of rows into db
