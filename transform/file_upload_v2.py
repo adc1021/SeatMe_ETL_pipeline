@@ -12,7 +12,7 @@ import configparser
 def read_config(file_path='/Users/antho/Documents/Job Search - 2023/Port-Proj/SeatMe_ETL/configuration.ini'):
     config = configparser.ConfigParser()
     config.read(file_path)
-
+    # removing the second set of quotation marks being added to the return values
     for section in config.sections():
         for key, value in config.items(section):
             config[section][key] = eval(value)
@@ -28,7 +28,6 @@ db = config['credentials']['db']
 port = config['credentials']['port']
 director = config['credentials']['director']
 to = config['credentials']['to']
-pdb.set_trace()
 # Initialize rows_imported outside the function
 rows_imported = 0
 
@@ -57,7 +56,7 @@ def extract():
                             if sheet_name == 'users':
                                 clean_df, sheet_name = users_validation(clean_df, sheet_name)
                         else:
-                            restaurant_validation(df, sheet_name)
+                            clean_df, sheet_name = restaurant_validation(df, sheet_name)
                         load(clean_df, sheet_name)
 
     except Exception as e:
