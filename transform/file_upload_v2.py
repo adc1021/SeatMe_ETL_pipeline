@@ -12,6 +12,10 @@ import configparser
 def read_config(file_path='/Users/antho/Documents/Job Search - 2023/Port-Proj/SeatMe_ETL/configuration.ini'):
     config = configparser.ConfigParser()
     config.read(file_path)
+
+    for section in config.sections():
+        for key, value in config.items(section):
+            config[section][key] = eval(value)
     return config
 
 # Example usage
