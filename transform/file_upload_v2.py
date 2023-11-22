@@ -8,15 +8,26 @@ from user_validation import users_validation
 from restaurant_validation import restaurant_validation
 import configparser
 
+# pulling variables from config file
+def read_config(file_path='/Users/antho/Documents/Job Search - 2023/Port-Proj/SeatMe_ETL/configuration.ini'):
+    config = configparser.ConfigParser()
+    config.read(file_path)
+    # removing the second set of quotation marks being added to the return values
+    for section in config.sections():
+        for key, value in config.items(section):
+            config[section][key] = eval(value)
+    return config
 
-pwd = 'biZRsBfFsAy7mJ45QhMhshNbirTUhVzT'
-uid = 'antho'
-server = "dpg-cl796vqvokcc73ak2vog-a.ohio-postgres.render.com"
-db = "seatme_production_9g3t"
-port = "5432"
-director = r'/Users/antho/Documents/Job Search - 2023/Port-Proj/SeatMe_ETL'
-to = 'jimbosixx@yahoo.com'
+# Example usage
+config = read_config()
 
+pwd = config['credentials']['pwd']
+uid = config['credentials']['uid']
+server = config['credentials']['server']
+db = config['credentials']['db']
+port = config['credentials']['port']
+director = config['credentials']['director']
+to = config['credentials']['to']
 # Initialize rows_imported outside the function
 rows_imported = 0
 
@@ -45,7 +56,7 @@ def extract():
                             if sheet_name == 'users':
                                 clean_df, sheet_name = users_validation(clean_df, sheet_name)
                         else:
-                            restaurant_validation(df, sheet_name)
+                            clean_df, sheet_name = restaurant_validation(df, sheet_name)
                         load(clean_df, sheet_name)
 
     except Exception as e:
