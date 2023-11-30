@@ -68,7 +68,7 @@ def extract():
 # load data to postgres
 def load(clean_df, tbl):
     try:
-        # Declare rows_imported as global
+        # Declare rows_imported as global to ensure variable does not reset
         global rows_imported
         # creating connection to database
         engine = create_engine(f'postgresql://{uid}:{pwd}@{server}:{port}/{db}')
